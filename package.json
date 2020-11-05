@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/deepslam/feature-framework#readme",
   "dependencies": {
-    "@feature-framework/core": "^0.5.1"
+    "@feature-framework/core": "^0.5.2"
   },
   "devDependencies": {
     "@types/dot-object": "^2.1.2",
