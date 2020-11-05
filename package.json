@@ -1,6 +1,6 @@
 {
   "name": "@feature-framework/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React implementations for feature framework",
   "main": "./src/index.ts",
   "scripts": {
