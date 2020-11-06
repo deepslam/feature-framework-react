@@ -21,7 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectApp = void 0;
 const react_1 = __importStar(require("react"));
-const AppProvider_1 = require("../Providers/AppProvider");
+const AppProvider_1 = require("../providers/AppProvider");
 function connectApp(callback, Component) {
     const Hoc = () => {
         const app = react_1.useContext(AppProvider_1.AppContext);

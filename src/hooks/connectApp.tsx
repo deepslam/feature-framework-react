@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { IApp } from "@feature-framework/core";
-import { AppContext } from "../Providers/AppProvider";
+import { AppContext } from "../providers/AppProvider";
 
 export type withAppProps<A extends IApp> = {
   app: A;
