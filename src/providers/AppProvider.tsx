@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 import { IApp } from "@feature-framework/core";
-import DefaultApplication from '../DefaultApplication';
+import DefaultApplication from "../DefaultApplication";
 
 type AppProviderPropsType = {
   app: IApp;

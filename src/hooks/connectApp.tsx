@@ -17,7 +17,7 @@ export function connectApp<P extends Record<string, unknown>, A extends IApp>(
 
     const updateProps = () => {
       if (app && app.isInitialized()) {
-        setProps(callback(app));
+        setProps({ ...callback(app) });
       }
     };
 
