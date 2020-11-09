@@ -29,7 +29,7 @@ function connectApp(callback, Component) {
         const val = react_1.default.useRef(props);
         const updateProps = () => {
             if (app && app.isInitialized()) {
-                setProps(callback(app));
+                setProps(Object.assign({}, callback(app)));
             }
         };
         react_1.useEffect(() => {
