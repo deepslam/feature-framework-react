@@ -4,6 +4,7 @@ import { render, fireEvent } from "@testing-library/react";
 import { connectApp } from "../hooks/connectApp";
 import { AppProvider } from "../providers/AppProvider";
 import TestApp from "./TestApp";
+import TestFeature from "./TestFeature";
 
 type titlePropsType = {
   title: string;
@@ -30,7 +31,7 @@ function title(props: titlePropsType) {
 }
 
 function ConnectedTitle() {
-  return connectApp(appToProps, title)();
+  return connectApp(appToProps, title, ["onUpdate"])();
 }
 
 function App({ app }: { app: TestApp }) {
@@ -47,7 +48,9 @@ describe("AppProvider and connectApp test", () => {
       title: "test",
     });
 
-    await app.init({});
+    await app.init({
+      testFeature: new TestFeature({ version: "1.0.1" }, {}),
+    });
 
     const instance = render(<App app={app} />);
 
@@ -82,7 +85,9 @@ describe("AppProvider and connectApp test", () => {
       title: "test",
     });
 
-    await app.init({});
+    await app.init({
+      testFeature: new TestFeature({ version: "1.0.0" }, {}),
+    });
 
     const instance = render(<App app={app} />);
 

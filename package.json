@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/deepslam/feature-framework#readme",
   "dependencies": {
-    "@feature-framework/core": "^0.5.2"
+    "@feature-framework/core": "^0.5.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",

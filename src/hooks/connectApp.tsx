@@ -6,9 +6,12 @@ export type withAppProps<A extends IApp> = {
   app: A;
 };
 
+export type connectAppEventType = "onUpdate" | "onFeatureUpdated";
+
 export function connectApp<P extends Record<string, unknown>, A extends IApp>(
   callback: (app: A) => P,
-  Component: React.ComponentType<P & withAppProps<A>>
+  Component: React.ComponentType<P & withAppProps<A>>,
+  events: connectAppEventType[] = ["onUpdate"]
 ) {
   const Hoc = (): JSX.Element => {
     const app = useContext(AppContext) as A;
@@ -23,12 +26,16 @@ export function connectApp<P extends Record<string, unknown>, A extends IApp>(
 
     useEffect(() => {
       val.current = props;
-      app.baseEvents.onUpdate.subscribe(() => {
-        updateProps();
+      events.forEach((event) => {
+        app.baseEvents[event].subscribe(() => {
+          updateProps();
+        });
       });
 
       return () => {
-        app.baseEvents.onUpdate.unsubscribe(updateProps);
+        events.forEach((event) => {
+          app.baseEvents[event].unsubscribe(updateProps);
+        });
       };
     });
 

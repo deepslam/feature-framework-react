@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectApp = void 0;
 const react_1 = __importStar(require("react"));
 const AppProvider_1 = require("../providers/AppProvider");
-function connectApp(callback, Component) {
+function connectApp(callback, Component, events = ["onUpdate"]) {
     const Hoc = () => {
         const app = react_1.useContext(AppProvider_1.AppContext);
         const [props, setProps] = react_1.useState(callback(app));
@@ -34,11 +34,15 @@ function connectApp(callback, Component) {
         };
         react_1.useEffect(() => {
             val.current = props;
-            app.baseEvents.onUpdate.subscribe(() => {
-                updateProps();
+            events.forEach((event) => {
+                app.baseEvents[event].subscribe(() => {
+                    updateProps();
+                });
             });
             return () => {
-                app.baseEvents.onUpdate.unsubscribe(updateProps);
+                events.forEach((event) => {
+                    app.baseEvents[event].unsubscribe(updateProps);
+                });
             };
         });
         react_1.useEffect(() => () => {
