@@ -1,19 +1,21 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { connectApp } from "../hooks/connectApp";
-import { AppProvider } from "../providers/AppProvider";
-import TestApp from "./TestApp";
-import TestFeature from "./TestFeature";
+import { connectApp } from "../../hooks/connectApp";
+import { AppProvider } from "../../providers/AppProvider";
+import TestApp from "../TestApp";
+import TestFeature from "../TestFeature";
 
 type titlePropsType = {
-  title: string;
+  version: string;
   app: TestApp;
 };
 
 const appToProps = (application: TestApp): titlePropsType => {
   return {
-    title: application.config.title,
+    version: application.isInitialized()
+      ? application.features().testFeature.config.version
+      : "",
     app: application,
   };
 };
@@ -21,17 +23,19 @@ const appToProps = (application: TestApp): titlePropsType => {
 function title(props: titlePropsType) {
   return (
     <div data-testid="title-container">
-      <p data-testid="title">{props.title}</p>
+      <p data-testid="title">{props.version}</p>
       <button
         data-testid="btn"
-        onClick={() => props.app.setConfig("title", "newTitle")}
+        onClick={() =>
+          props.app.features().testFeature.extendConfig({ version: "1.0.1" })
+        }
       />
     </div>
   );
 }
 
 function ConnectedTitle() {
-  return connectApp(appToProps, title, ["onUpdate"])();
+  return connectApp(appToProps, title, ["onFeatureUpdated"])();
 }
 
 function App({ app }: { app: TestApp }) {
@@ -49,12 +53,12 @@ describe("AppProvider and connectApp test", () => {
     });
 
     await app.init({
-      testFeature: new TestFeature({ version: "1.0.1" }, {}),
+      testFeature: new TestFeature({ version: "1.0.0" }, {}),
     });
 
     const instance = render(<App app={app} />);
 
-    expect(instance.getByTestId("title").textContent).toBe("test");
+    expect(instance.getByTestId("title").textContent).toBe("1.0.0");
   });
 
   test("try to change props on the not initialized app", async () => {
@@ -64,20 +68,7 @@ describe("AppProvider and connectApp test", () => {
 
     const instance = render(<App app={app} />);
 
-    expect(instance.getByTestId("title").textContent).toBe("test");
-
-    const updateConfigEventHandler = jest.fn();
-
-    app.baseEvents.onUpdate.subscribe(updateConfigEventHandler);
-
-    fireEvent.click(instance.getByTestId("btn"));
-
-    await instance.rerender(<App app={app} />);
-
-    expect(updateConfigEventHandler).toBeCalled();
-    expect(app.config.title).toBe("newTitle");
-
-    expect(instance.getByTestId("title").textContent).toBe("test");
+    expect(instance.getByTestId("title").textContent).toBe("");
   });
 
   test("try to change props on initialized app", async () => {
@@ -91,19 +82,19 @@ describe("AppProvider and connectApp test", () => {
 
     const instance = render(<App app={app} />);
 
-    expect(instance.getByTestId("title").textContent).toBe("test");
+    expect(instance.getByTestId("title").textContent).toBe("1.0.0");
 
-    const updateConfigEventHandler = jest.fn();
+    const updateFeatureEventHandler = jest.fn();
 
-    app.baseEvents.onUpdate.subscribe(updateConfigEventHandler);
+    app.baseEvents.onFeatureUpdated.subscribe(updateFeatureEventHandler);
 
     fireEvent.click(instance.getByTestId("btn"));
 
     await instance.rerender(<App app={app} />);
 
-    expect(updateConfigEventHandler).toBeCalled();
-    expect(app.config.title).toBe("newTitle");
+    expect(updateFeatureEventHandler).toBeCalled();
+    expect(app.features().testFeature.config.version).toBe("1.0.1");
 
-    expect(instance.getByTestId("title").textContent).toBe("newTitle");
+    expect(instance.getByTestId("title").textContent).toBe("1.0.1");
   });
 });

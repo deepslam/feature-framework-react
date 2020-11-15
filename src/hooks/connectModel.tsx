@@ -40,9 +40,7 @@ export function connectApp<P extends Record<string, unknown>, A extends IApp>(
     });
 
     useEffect(() => () => {
-      events.forEach((event) => {
-        app.baseEvents[event].unsubscribe(updateProps);
-      });
+      app.baseEvents.onUpdate.unsubscribe(updateProps);
     });
 
     return (
