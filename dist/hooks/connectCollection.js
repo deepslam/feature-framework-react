@@ -19,41 +19,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectApp = void 0;
+exports.connectCollection = void 0;
 const react_1 = __importStar(require("react"));
-const AppProvider_1 = require("../providers/AppProvider");
-function connectApp(callback, Component, events = ["onUpdate"]) {
-    const Hoc = () => {
-        const app = react_1.useContext(AppProvider_1.AppContext);
-        const [props, setProps] = react_1.useState(callback(app));
+function connectCollection(callback, Component) {
+    const Hoc = (collection) => {
+        const [props, setProps] = react_1.useState(callback(collection));
         const val = react_1.default.useRef(props);
         const updateProps = () => {
-            if (app && app.isInitialized()) {
-                setProps(Object.assign({}, callback(app)));
-            }
+            setProps(Object.assign({}, callback(collection)));
         };
         react_1.useEffect(() => {
             val.current = props;
-            events.forEach((event) => {
-                app.baseEvents[event].subscribe(() => {
+            Object.keys(collection.events).forEach((eventName) => {
+                collection.events[eventName].subscribe(() => {
                     updateProps();
                 });
             });
             return () => {
-                events.forEach((event) => {
-                    app.baseEvents[event].unsubscribe(updateProps);
+                Object.keys(collection.events).forEach((eventName) => {
+                    collection.events[eventName].unsubscribe(updateProps);
                 });
             };
         });
         react_1.useEffect(() => () => {
-            events.forEach((event) => {
-                app.baseEvents[event].unsubscribe(updateProps);
+            Object.keys(collection.events).forEach((eventName) => {
+                collection.events[eventName].unsubscribe(updateProps);
             });
         });
         return (react_1.default.createElement(react_1.default.Fragment, null,
-            react_1.default.createElement(Component, Object.assign({}, props, { app: app }))));
+            react_1.default.createElement(Component, Object.assign({}, props))));
     };
     return Hoc;
 }
-exports.connectApp = connectApp;
-//# sourceMappingURL=connectApp.js.map
+exports.connectCollection = connectCollection;
+//# sourceMappingURL=connectCollection.js.map

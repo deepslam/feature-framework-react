@@ -72,8 +72,6 @@ describe("AppProvider and connectApp test", () => {
 
     fireEvent.click(instance.getByTestId("btn"));
 
-    await instance.rerender(<App app={app} />);
-
     expect(updateConfigEventHandler).toBeCalled();
     expect(app.config.title).toBe("newTitle");
 
@@ -98,8 +96,6 @@ describe("AppProvider and connectApp test", () => {
     app.baseEvents.onUpdate.subscribe(updateConfigEventHandler);
 
     fireEvent.click(instance.getByTestId("btn"));
-
-    await instance.rerender(<App app={app} />);
 
     expect(updateConfigEventHandler).toBeCalled();
     expect(app.config.title).toBe("newTitle");

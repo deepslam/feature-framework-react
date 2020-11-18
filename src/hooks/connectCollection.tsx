@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { DataCollection, Model } from "@feature-framework/core";
+import {
+  IDataCollection,
+  Model,
+  DataCollectionStandardEventsType,
+} from "@feature-framework/core";
 
-export type withCollectionProps<C extends DataCollection<unknown>> = {
+export type withCollectionProps<C extends IDataCollection<unknown>> = {
   collection: C;
-  onAddItem: () => void;
+  onAddItem?: () => void;
 };
 
-export type connectAppEventType = "onUpdate" | "onFeatureUpdated";
+export type connectCollectionEventType = keyof DataCollectionStandardEventsType<
+  IDataCollection<unknown>
+>;
 
 export function connectCollection<
   P extends Record<string, unknown>,
-  C extends DataCollection<typeof Model>
->(callback: (collection: C) => P, Component: React.ComponentType<P>) {
+  C extends IDataCollection<Model>
+>(callback: (c: C) => P, Component: React.ComponentType<P>) {
   const Hoc = (collection: C): JSX.Element => {
     const [props, setProps] = useState(callback(collection));
     const val = React.useRef<P>(props);
@@ -24,21 +30,27 @@ export function connectCollection<
       val.current = props;
 
       Object.keys(collection.events).forEach((eventName) => {
-        collection.events[eventName].subscribe(() => {
-          updateProps();
-        });
+        collection.events[eventName as connectCollectionEventType].subscribe(
+          () => {
+            updateProps();
+          }
+        );
       });
 
       return () => {
         Object.keys(collection.events).forEach((eventName) => {
-          collection.events[eventName].unsubscribe(updateProps);
+          collection.events[
+            eventName as connectCollectionEventType
+          ].unsubscribe(updateProps);
         });
       };
     });
 
     useEffect(() => () => {
       Object.keys(collection.events).forEach((eventName) => {
-        collection.events[eventName].unsubscribe(updateProps);
+        collection.events[eventName as connectCollectionEventType].unsubscribe(
+          updateProps
+        );
       });
     });
 

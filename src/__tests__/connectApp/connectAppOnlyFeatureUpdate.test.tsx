@@ -90,8 +90,6 @@ describe("AppProvider and connectApp test", () => {
 
     fireEvent.click(instance.getByTestId("btn"));
 
-    await instance.rerender(<App app={app} />);
-
     expect(updateFeatureEventHandler).toBeCalled();
     expect(app.features().testFeature.config.version).toBe("1.0.1");
 

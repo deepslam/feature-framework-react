@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/deepslam/feature-framework#readme",
   "dependencies": {
-    "@feature-framework/core": "^0.5.3"
+    "@feature-framework/core": "^0.5.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",
@@ -51,6 +51,7 @@
     "eslint-plugin-jest": "^23.20.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
     "jest": "^26.2.2",
     "jest-circus": "^26.2.2",
     "jest-fetch-mock": "^3.0.3",

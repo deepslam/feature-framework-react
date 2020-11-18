@@ -1,51 +1,53 @@
-import React, { useEffect, useState, useContext } from "react";
-import { IApp } from "@feature-framework/core";
-import { AppContext } from "../providers/AppProvider";
+import React, { useEffect, useState } from "react";
+import { IModel, ModelStandardEventsType } from "@feature-framework/core";
 
-export type withAppProps<A extends IApp> = {
-  app: A;
+export type withModelProps<M extends IModel> = {
+  model: M;
 };
 
-export type connectAppEventType = "onUpdate" | "onFeatureUpdated";
+export type connectModelEventType = keyof ModelStandardEventsType<IModel>;
 
-export function connectApp<P extends Record<string, unknown>, A extends IApp>(
-  callback: (app: A) => P,
-  Component: React.ComponentType<P & withAppProps<A>>,
-  events: connectAppEventType[] = ["onUpdate"]
-) {
-  const Hoc = (): JSX.Element => {
-    const app = useContext(AppContext) as A;
-    const [props, setProps] = useState(callback(app));
+export function connectModel<
+  P extends Record<string, unknown>,
+  M extends IModel
+>(callback: (m: M) => P, Component: React.ComponentType<P>) {
+  const Hoc = (model: M): JSX.Element => {
+    const [props, setProps] = useState(callback(model));
     const val = React.useRef<P>(props);
 
     const updateProps = () => {
-      if (app && app.isInitialized()) {
-        setProps({ ...callback(app) });
-      }
+      setProps({ ...callback(model) });
     };
 
     useEffect(() => {
       val.current = props;
-      events.forEach((event) => {
-        app.baseEvents[event].subscribe(() => {
+
+      Object.keys(model.baseEvents).forEach((eventName) => {
+        model.baseEvents[eventName as connectModelEventType].subscribe(() => {
           updateProps();
         });
       });
 
       return () => {
-        events.forEach((event) => {
-          app.baseEvents[event].unsubscribe(updateProps);
+        Object.keys(model.baseEvents).forEach((eventName) => {
+          model.baseEvents[eventName as connectModelEventType].unsubscribe(
+            updateProps
+          );
         });
       };
     });
 
     useEffect(() => () => {
-      app.baseEvents.onUpdate.unsubscribe(updateProps);
+      Object.keys(model.baseEvents).forEach((eventName) => {
+        model.baseEvents[eventName as connectModelEventType].unsubscribe(
+          updateProps
+        );
+      });
     });
 
     return (
       <>
-        <Component {...props} app={app} />
+        <Component {...props} />
       </>
     );
   };
