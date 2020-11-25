@@ -27,8 +27,9 @@ const react_1 = __importStar(require("react"));
 const DefaultApplication_1 = __importDefault(require("../DefaultApplication"));
 exports.AppContext = react_1.createContext(new DefaultApplication_1.default({}));
 // This context provider is passed to any component requiring the context
-exports.AppProvider = ({ app, children }) => {
+const AppProvider = ({ app, children }) => {
     const [internalApp] = react_1.useState(app);
     return (react_1.default.createElement(exports.AppContext.Provider, { value: internalApp }, children));
 };
+exports.AppProvider = AppProvider;
 //# sourceMappingURL=AppProvider.js.map

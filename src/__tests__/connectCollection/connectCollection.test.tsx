@@ -4,7 +4,7 @@ import { render, fireEvent } from "@testing-library/react";
 import {
   connectCollection,
   withCollectionProps,
-} from "../../hooks/connectCollection";
+} from "../../helpers/connectCollection";
 import TestModelCollection from "../TestModelCollection";
 import TestModel from "../TestModel";
 

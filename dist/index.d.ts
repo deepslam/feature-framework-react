@@ -1,7 +1,8 @@
 import LocalStorageDataProvider from "./providers/LocalStorageDataProvider";
 import { AppProvider, AppContext } from "./providers/AppProvider";
-import { connectApp } from "./hooks/connectApp";
-import { connectCollection } from "./hooks/connectCollection";
-import { connectModel } from "./hooks/connectModel";
+import { connectApp } from "./helpers/connectApp";
+import { connectCollection } from "./helpers/connectCollection";
+import { connectModel } from "./helpers/connectModel";
+import { useApp } from "./hooks/useApp";
 import ReactView from "./views/ReactView";
-export { LocalStorageDataProvider, ReactView, AppProvider, AppContext, connectApp, connectCollection, connectModel, };
+export { LocalStorageDataProvider, ReactView, AppProvider, AppContext, connectApp, connectCollection, connectModel, useApp, };

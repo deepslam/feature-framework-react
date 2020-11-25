@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { connectApp } from "../../hooks/connectApp";
+import { connectApp } from "../../helpers/connectApp";
 import { AppProvider } from "../../providers/AppProvider";
 import TestApp from "../TestApp";
 import TestFeature from "../TestFeature";

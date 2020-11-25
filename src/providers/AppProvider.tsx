@@ -4,7 +4,7 @@ import DefaultApplication from "../DefaultApplication";
 
 type AppProviderPropsType = {
   app: IApp;
-  children: JSX.Element | JSX.Element[];
+  children?: JSX.Element | JSX.Element[];
 };
 
 export const AppContext = createContext<IApp>(new DefaultApplication({}));
