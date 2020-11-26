@@ -47,7 +47,7 @@ function connectCollection(callback, Component) {
             });
         });
         return (react_1.default.createElement(react_1.default.Fragment, null,
-            react_1.default.createElement(Component, Object.assign({}, props))));
+            react_1.default.createElement(Component, Object.assign({}, props, { collection: collection }))));
     };
     return Hoc;
 }

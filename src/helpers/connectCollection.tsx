@@ -56,7 +56,7 @@ export function connectCollection<
 
     return (
       <>
-        <Component {...props} />
+        <Component {...props} collection={collection} />
       </>
     );
   };

@@ -3,6 +3,7 @@ import { Feature, IFeature, IApp } from "@feature-framework/core";
 // Feature config type here
 type TestFeatureConfigType = {
   version: string;
+  title?: string;
 };
 type TestFeatureFeaturesType = Record<string, IFeature<any, any>>;
 

@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { IModel, ModelStandardEventsType } from "@feature-framework/core";
+import { IFeature, FeatureStandardEventsType } from "@feature-framework/core";
 
-export type withModelProps<M extends IModel> = {
-  model: M;
+export type withFeatureProps<F extends IFeature<any, any>> = {
+  feature: F;
 };
 
-export type connectModelEventType = keyof ModelStandardEventsType<IModel>;
+export type connectFeatureEventType = keyof FeatureStandardEventsType<
+  IFeature<any, any>
+>;
 
-export function connectModel<
+export function connectFeature<
   P extends Record<string, unknown>,
-  M extends IModel
->(callback: (m: M) => P, Component: React.ComponentType<P>) {
-  const Hoc = (model: M): JSX.Element => {
+  F extends IFeature<any, any>
+>(callback: (f: F) => P, Component: React.ComponentType<P>) {
+  const Hoc = (model: F): JSX.Element => {
     const [props, setProps] = useState(callback(model));
     const val = React.useRef<P>(props);
 
@@ -23,14 +25,14 @@ export function connectModel<
       val.current = props;
 
       Object.keys(model.baseEvents).forEach((eventName) => {
-        model.baseEvents[eventName as connectModelEventType].subscribe(() => {
+        model.baseEvents[eventName as connectFeatureEventType].subscribe(() => {
           updateProps();
         });
       });
 
       return () => {
         Object.keys(model.baseEvents).forEach((eventName) => {
-          model.baseEvents[eventName as connectModelEventType].unsubscribe(
+          model.baseEvents[eventName as connectFeatureEventType].unsubscribe(
             updateProps
           );
         });
@@ -39,7 +41,7 @@ export function connectModel<
 
     useEffect(() => () => {
       Object.keys(model.baseEvents).forEach((eventName) => {
-        model.baseEvents[eventName as connectModelEventType].unsubscribe(
+        model.baseEvents[eventName as connectFeatureEventType].unsubscribe(
           updateProps
         );
       });
@@ -47,7 +49,7 @@ export function connectModel<
 
     return (
       <>
-        <Component {...props} model={model} />
+        <Component {...props} />
       </>
     );
   };

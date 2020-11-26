@@ -39,7 +39,7 @@ function App({ model }: { model: TestModel }) {
 }
 
 describe("connectModel test", () => {
-  test("test creating, changing and deleting elements", async () => {
+  test("test changing a model", async () => {
     const updateModelListener = jest.fn();
 
     const model = new TestModel({
