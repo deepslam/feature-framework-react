@@ -22,28 +22,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectFeature = void 0;
 const react_1 = __importStar(require("react"));
 function connectFeature(callback, Component) {
-    const Hoc = (model) => {
-        const [props, setProps] = react_1.useState(callback(model));
+    const Hoc = (feature) => {
+        const [props, setProps] = react_1.useState(callback(feature));
         const val = react_1.default.useRef(props);
         const updateProps = () => {
-            setProps(Object.assign({}, callback(model)));
+            setProps(Object.assign({}, callback(feature)));
         };
         react_1.useEffect(() => {
             val.current = props;
-            Object.keys(model.baseEvents).forEach((eventName) => {
-                model.baseEvents[eventName].subscribe(() => {
+            Object.keys(feature.baseEvents).forEach((eventName) => {
+                feature.baseEvents[eventName].subscribe(() => {
                     updateProps();
                 });
             });
             return () => {
-                Object.keys(model.baseEvents).forEach((eventName) => {
-                    model.baseEvents[eventName].unsubscribe(updateProps);
+                Object.keys(feature.baseEvents).forEach((eventName) => {
+                    feature.baseEvents[eventName].unsubscribe(updateProps);
                 });
             };
         });
         react_1.useEffect(() => () => {
-            Object.keys(model.baseEvents).forEach((eventName) => {
-                model.baseEvents[eventName].unsubscribe(updateProps);
+            Object.keys(feature.baseEvents).forEach((eventName) => {
+                feature.baseEvents[eventName].unsubscribe(updateProps);
             });
         });
         return (react_1.default.createElement(react_1.default.Fragment, null,

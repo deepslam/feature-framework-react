@@ -13,26 +13,28 @@ export function connectFeature<
   P extends Record<string, unknown>,
   F extends IFeature<any, any>
 >(callback: (f: F) => P, Component: React.ComponentType<P>) {
-  const Hoc = (model: F): JSX.Element => {
-    const [props, setProps] = useState(callback(model));
+  const Hoc = (feature: F): JSX.Element => {
+    const [props, setProps] = useState(callback(feature));
     const val = React.useRef<P>(props);
 
     const updateProps = () => {
-      setProps({ ...callback(model) });
+      setProps({ ...callback(feature) });
     };
 
     useEffect(() => {
       val.current = props;
 
-      Object.keys(model.baseEvents).forEach((eventName) => {
-        model.baseEvents[eventName as connectFeatureEventType].subscribe(() => {
-          updateProps();
-        });
+      Object.keys(feature.baseEvents).forEach((eventName) => {
+        feature.baseEvents[eventName as connectFeatureEventType].subscribe(
+          () => {
+            updateProps();
+          }
+        );
       });
 
       return () => {
-        Object.keys(model.baseEvents).forEach((eventName) => {
-          model.baseEvents[eventName as connectFeatureEventType].unsubscribe(
+        Object.keys(feature.baseEvents).forEach((eventName) => {
+          feature.baseEvents[eventName as connectFeatureEventType].unsubscribe(
             updateProps
           );
         });
@@ -40,8 +42,8 @@ export function connectFeature<
     });
 
     useEffect(() => () => {
-      Object.keys(model.baseEvents).forEach((eventName) => {
-        model.baseEvents[eventName as connectFeatureEventType].unsubscribe(
+      Object.keys(feature.baseEvents).forEach((eventName) => {
+        feature.baseEvents[eventName as connectFeatureEventType].unsubscribe(
           updateProps
         );
       });
