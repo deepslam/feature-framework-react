@@ -21,8 +21,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectFeature = void 0;
 const react_1 = __importStar(require("react"));
-function connectFeature(callback, Component) {
-    const Hoc = (feature) => {
+function connectFeature(callback, Component, feature) {
+    const Hoc = () => {
         const [props, setProps] = react_1.useState(callback(feature));
         const val = react_1.default.useRef(props);
         const updateProps = () => {

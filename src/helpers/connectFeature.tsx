@@ -12,8 +12,8 @@ export type connectFeatureEventType = keyof FeatureStandardEventsType<
 export function connectFeature<
   P extends Record<string, unknown>,
   F extends IFeature<any, any>
->(callback: (f: F) => P, Component: React.ComponentType<P>) {
-  const Hoc = (feature: F): JSX.Element => {
+>(callback: (f: F) => P, Component: React.ComponentType<P>, feature: F) {
+  const Hoc = (): JSX.Element => {
     const [props, setProps] = useState(callback(feature));
     const val = React.useRef<P>(props);
 

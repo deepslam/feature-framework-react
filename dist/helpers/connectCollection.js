@@ -21,8 +21,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectCollection = void 0;
 const react_1 = __importStar(require("react"));
-function connectCollection(callback, Component) {
-    const Hoc = (collection) => {
+function connectCollection(callback, Component, collection) {
+    const Hoc = () => {
         const [props, setProps] = react_1.useState(callback(collection));
         const val = react_1.default.useRef(props);
         const updateProps = () => {

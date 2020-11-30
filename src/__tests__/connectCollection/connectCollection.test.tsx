@@ -49,8 +49,9 @@ function title(props: titlePropsType) {
 function ConnectedTitle({ collection }: { collection: TestModelCollection }) {
   return connectCollection<titlePropsType, TestModelCollection>(
     appToProps,
-    title
-  )(collection);
+    title,
+    collection
+  )();
 }
 
 function App({ collection }: { collection: TestModelCollection }) {

@@ -36,8 +36,9 @@ function title(props: titlePropsType) {
 function ConnectedTitle({ feature }: { feature: TestFeature }) {
   return connectFeature<titlePropsType, TestFeature>(
     appToProps,
-    title
-  )(feature);
+    title,
+    feature
+  )();
 }
 
 function App({ feature }: { feature: TestFeature }) {

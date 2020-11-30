@@ -10,8 +10,8 @@ export type connectModelEventType = keyof ModelStandardEventsType<IModel>;
 export function connectModel<
   P extends Record<string, unknown>,
   M extends IModel
->(callback: (m: M) => P, Component: React.ComponentType<P>) {
-  const Hoc = (model: M): JSX.Element => {
+>(callback: (m: M) => P, Component: React.ComponentType<P>, model: M) {
+  const Hoc = (): JSX.Element => {
     const [props, setProps] = useState(callback(model));
     const val = React.useRef<P>(props);
 

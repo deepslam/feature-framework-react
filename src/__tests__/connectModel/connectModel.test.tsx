@@ -31,7 +31,7 @@ function title(props: titlePropsType) {
 }
 
 function ConnectedTitle({ model }: { model: TestModel }) {
-  return connectModel<titlePropsType, TestModel>(appToProps, title)(model);
+  return connectModel<titlePropsType, TestModel>(appToProps, title, model)();
 }
 
 function App({ model }: { model: TestModel }) {

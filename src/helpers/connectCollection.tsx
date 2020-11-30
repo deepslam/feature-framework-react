@@ -17,8 +17,8 @@ export type connectCollectionEventType = keyof DataCollectionStandardEventsType<
 export function connectCollection<
   P extends Record<string, unknown>,
   C extends IDataCollection<Model>
->(callback: (c: C) => P, Component: React.ComponentType<P>) {
-  const Hoc = (collection: C): JSX.Element => {
+>(callback: (c: C) => P, Component: React.ComponentType<P>, collection: C) {
+  const Hoc = (): JSX.Element => {
     const [props, setProps] = useState(callback(collection));
     const val = React.useRef<P>(props);
 
