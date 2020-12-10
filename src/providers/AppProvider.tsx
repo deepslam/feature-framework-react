@@ -3,11 +3,11 @@ import { IApp } from "@feature-framework/core";
 import DefaultApplication from "../DefaultApplication";
 
 type AppProviderPropsType = {
-  app: IApp;
+  app: IApp<any>;
   children?: JSX.Element | JSX.Element[];
 };
 
-export const AppContext = createContext<IApp>(new DefaultApplication({}));
+export const AppContext = createContext<IApp<any>>(new DefaultApplication({}));
 
 // This context provider is passed to any component requiring the context
 export const AppProvider = ({ app, children }: AppProviderPropsType) => {

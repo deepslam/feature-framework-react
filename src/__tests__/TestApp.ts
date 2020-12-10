@@ -1,15 +1,13 @@
 import { Application } from "@feature-framework/core";
 import TestFeature from "./TestFeature";
 
-export type TestAppConfigType = {
-  title: string;
+export type TestAppType = {
+  config: {
+    title: string;
+  };
+  features: {
+    testFeature: TestFeature;
+  };
 };
 
-export type TestAppFeaturesType = {
-  testFeature: TestFeature;
-};
-
-export default class TestApp extends Application<
-  TestAppFeaturesType,
-  TestAppConfigType
-> {}
+export default class TestApp extends Application<TestAppType> {}

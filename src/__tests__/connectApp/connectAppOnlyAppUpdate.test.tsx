@@ -45,11 +45,15 @@ function App({ app }: { app: TestApp }) {
 describe("AppProvider and connectApp test", () => {
   test("test default props", async () => {
     const app = new TestApp({
-      title: "test",
+      config: {
+        title: "test",
+      },
     });
 
     await app.init({
-      testFeature: new TestFeature({ version: "1.0.1" }, {}),
+      features: {
+        testFeature: new TestFeature({ config: { version: "1.0.1" } }),
+      },
     });
 
     const instance = render(<App app={app} />);
@@ -59,7 +63,9 @@ describe("AppProvider and connectApp test", () => {
 
   test("try to change props on the not initialized app", async () => {
     const app = new TestApp({
-      title: "test",
+      config: {
+        title: "test",
+      },
     });
 
     const instance = render(<App app={app} />);
@@ -80,11 +86,15 @@ describe("AppProvider and connectApp test", () => {
 
   test("try to change props on initialized app", async () => {
     const app = new TestApp({
-      title: "test",
+      config: {
+        title: "test",
+      },
     });
 
     await app.init({
-      testFeature: new TestFeature({ version: "1.0.0" }, {}),
+      features: {
+        testFeature: new TestFeature({ config: { version: "1.0.0" } }),
+      },
     });
 
     const instance = render(<App app={app} />);

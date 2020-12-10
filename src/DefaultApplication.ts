@@ -1,3 +1,3 @@
-import { Application } from '@feature-framework/core';
+import { Application } from "@feature-framework/core";
 
-export default class DefaultApplication extends Application<{}, {}> { }
+export default class DefaultApplication extends Application<any> { }

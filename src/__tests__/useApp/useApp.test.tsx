@@ -27,11 +27,15 @@ function App({ app }: { app: TestApp }) {
 describe("Check withApp hook", () => {
   test("test that withApp receive the correct app instance", async () => {
     const app = new TestApp({
-      title: "test",
+      config: {
+        title: "test",
+      },
     });
 
     await app.init({
-      testFeature: new TestFeature({ version: "1.0.1" }, {}),
+      features: {
+        testFeature: new TestFeature({ config: { version: "1.0.1" } }),
+      },
     });
 
     const instance = render(<App app={app} />);

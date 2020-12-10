@@ -48,16 +48,17 @@ function App({ feature }: { feature: TestFeature }) {
 describe("connectFeature test", () => {
   test("test that a feature can handle changing correctly", async () => {
     const updateFeatureListener = jest.fn();
-    const app = new TestApp({ title: "new app" });
-    const feature = new TestFeature(
-      {
+    const app = new TestApp({ config: { title: "new app" } });
+    const feature = new TestFeature({
+      config: {
         version: "1.0",
       },
-      {}
-    );
+    });
 
     app.init({
-      testFeature: feature,
+      features: {
+        testFeature: feature,
+      },
     });
 
     feature.baseEvents.onUpdate.subscribe(updateFeatureListener);

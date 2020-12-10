@@ -1,15 +1,14 @@
-import { Feature, IFeature, IApp } from "@feature-framework/core";
+import { Feature, IApp } from "@feature-framework/core";
 
 // Feature config type here
-type TestFeatureConfigType = {
-  version: string;
-  title?: string;
+type TestFeatureType = {
+  config: {
+    version: string;
+    title?: string;
+  };
 };
-type TestFeatureFeaturesType = Record<string, IFeature<any, any>>;
 
-export default class TestFeature
-  extends Feature<TestFeatureConfigType, IApp, TestFeatureFeaturesType>
-  implements IFeature<TestFeatureConfigType, IApp> {
+export default class TestFeature extends Feature<TestFeatureType, IApp<any>> {
   name = "TestFeature";
 
   initFeature() {

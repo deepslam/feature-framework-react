@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { IApp, ConfigType } from "@feature-framework/core";
+import { IApp } from "@feature-framework/core";
 import { AppContext } from "../providers/AppProvider";
 
-export const useApp = <A extends IApp<Record<string, ConfigType>>>(): A => {
+export const useApp = <A extends IApp<any>>(): A => {
   return useContext(AppContext) as A;
 };
