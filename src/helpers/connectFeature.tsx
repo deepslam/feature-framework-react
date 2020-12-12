@@ -15,14 +15,14 @@ export function connectFeature<
 >(callback: (f: F) => P, Component: React.ComponentType<P>, feature: F) {
   const Hoc = (): JSX.Element => {
     const [props, setProps] = useState(callback(feature));
-    const val = React.useRef<P>(props);
+    const ref = React.useRef<P>(props);
 
     const updateProps = () => {
       setProps({ ...callback(feature) });
     };
 
     useEffect(() => {
-      val.current = props;
+      ref.current = props;
 
       Object.keys(feature.baseEvents).forEach((eventName) => {
         feature.baseEvents[eventName as connectFeatureEventType].subscribe(
@@ -33,6 +33,9 @@ export function connectFeature<
       });
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ref.current = false;
         Object.keys(feature.baseEvents).forEach((eventName) => {
           feature.baseEvents[eventName as connectFeatureEventType].unsubscribe(
             updateProps
@@ -41,19 +44,7 @@ export function connectFeature<
       };
     });
 
-    useEffect(() => () => {
-      Object.keys(feature.baseEvents).forEach((eventName) => {
-        feature.baseEvents[eventName as connectFeatureEventType].unsubscribe(
-          updateProps
-        );
-      });
-    });
-
-    return (
-      <>
-        <Component {...props} />
-      </>
-    );
+    return <Component {...props} />;
   };
 
   return Hoc;

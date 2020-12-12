@@ -13,14 +13,14 @@ export function connectModel<
 >(callback: (m: M) => P, Component: React.ComponentType<P>, model: M) {
   const Hoc = (): JSX.Element => {
     const [props, setProps] = useState(callback(model));
-    const val = React.useRef<P>(props);
+    const ref = React.useRef<P>(props);
 
     const updateProps = () => {
       setProps({ ...callback(model) });
     };
 
     useEffect(() => {
-      val.current = props;
+      ref.current = props;
 
       Object.keys(model.baseEvents).forEach((eventName) => {
         model.baseEvents[eventName as connectModelEventType].subscribe(() => {
@@ -29,6 +29,9 @@ export function connectModel<
       });
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ref.current = false;
         Object.keys(model.baseEvents).forEach((eventName) => {
           model.baseEvents[eventName as connectModelEventType].unsubscribe(
             updateProps
@@ -37,19 +40,7 @@ export function connectModel<
       };
     });
 
-    useEffect(() => () => {
-      Object.keys(model.baseEvents).forEach((eventName) => {
-        model.baseEvents[eventName as connectModelEventType].unsubscribe(
-          updateProps
-        );
-      });
-    });
-
-    return (
-      <>
-        <Component {...props} model={model} />
-      </>
-    );
+    return <Component {...props} model={model} />;
   };
 
   return Hoc;

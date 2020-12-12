@@ -19,7 +19,7 @@ export function connectApp<
   const Hoc = (): JSX.Element => {
     const app = useContext(AppContext) as A;
     const [props, setProps] = useState(callback(app));
-    const val = React.useRef<P>(props);
+    const ref = React.useRef<P>(props);
 
     const updateProps = () => {
       if (app && app.isInitialized()) {
@@ -28,7 +28,7 @@ export function connectApp<
     };
 
     useEffect(() => {
-      val.current = props;
+      ref.current = props;
       events.forEach((event) => {
         app.baseEvents[event].subscribe(() => {
           updateProps();
@@ -36,23 +36,16 @@ export function connectApp<
       });
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ref.current = false;
         events.forEach((event) => {
           app.baseEvents[event].unsubscribe(updateProps);
         });
       };
     });
 
-    useEffect(() => () => {
-      events.forEach((event) => {
-        app.baseEvents[event].unsubscribe(updateProps);
-      });
-    });
-
-    return (
-      <>
-        <Component {...props} app={app} />
-      </>
-    );
+    return <Component {...props} app={app} />;
   };
 
   return Hoc;

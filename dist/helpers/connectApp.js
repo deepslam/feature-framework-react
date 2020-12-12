@@ -26,32 +26,29 @@ function connectApp(callback, Component, events = ["onUpdate"]) {
     const Hoc = () => {
         const app = react_1.useContext(AppProvider_1.AppContext);
         const [props, setProps] = react_1.useState(callback(app));
-        const val = react_1.default.useRef(props);
+        const ref = react_1.default.useRef(props);
         const updateProps = () => {
             if (app && app.isInitialized()) {
                 setProps(Object.assign({}, callback(app)));
             }
         };
         react_1.useEffect(() => {
-            val.current = props;
+            ref.current = props;
             events.forEach((event) => {
                 app.baseEvents[event].subscribe(() => {
                     updateProps();
                 });
             });
             return () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                ref.current = false;
                 events.forEach((event) => {
                     app.baseEvents[event].unsubscribe(updateProps);
                 });
             };
         });
-        react_1.useEffect(() => () => {
-            events.forEach((event) => {
-                app.baseEvents[event].unsubscribe(updateProps);
-            });
-        });
-        return (react_1.default.createElement(react_1.default.Fragment, null,
-            react_1.default.createElement(Component, Object.assign({}, props, { app: app }))));
+        return react_1.default.createElement(Component, Object.assign({}, props, { app: app }));
     };
     return Hoc;
 }

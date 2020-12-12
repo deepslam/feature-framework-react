@@ -20,14 +20,14 @@ export function connectCollection<
 >(callback: (c: C) => P, Component: React.ComponentType<P>, collection: C) {
   const Hoc = (): JSX.Element => {
     const [props, setProps] = useState(callback(collection));
-    const val = React.useRef<P>(props);
+    const ref = React.useRef<P>(props);
 
     const updateProps = () => {
       setProps({ ...callback(collection) });
     };
 
     useEffect(() => {
-      val.current = props;
+      ref.current = props;
 
       Object.keys(collection.events).forEach((eventName) => {
         collection.events[eventName as connectCollectionEventType].subscribe(
@@ -38,6 +38,9 @@ export function connectCollection<
       });
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ref.current = false;
         Object.keys(collection.events).forEach((eventName) => {
           collection.events[
             eventName as connectCollectionEventType
@@ -46,19 +49,7 @@ export function connectCollection<
       };
     });
 
-    useEffect(() => () => {
-      Object.keys(collection.events).forEach((eventName) => {
-        collection.events[eventName as connectCollectionEventType].unsubscribe(
-          updateProps
-        );
-      });
-    });
-
-    return (
-      <>
-        <Component {...props} collection={collection} />
-      </>
-    );
+    return <Component {...props} collection={collection} />;
   };
 
   return Hoc;

@@ -24,30 +24,27 @@ const react_1 = __importStar(require("react"));
 function connectModel(callback, Component, model) {
     const Hoc = () => {
         const [props, setProps] = react_1.useState(callback(model));
-        const val = react_1.default.useRef(props);
+        const ref = react_1.default.useRef(props);
         const updateProps = () => {
             setProps(Object.assign({}, callback(model)));
         };
         react_1.useEffect(() => {
-            val.current = props;
+            ref.current = props;
             Object.keys(model.baseEvents).forEach((eventName) => {
                 model.baseEvents[eventName].subscribe(() => {
                     updateProps();
                 });
             });
             return () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                ref.current = false;
                 Object.keys(model.baseEvents).forEach((eventName) => {
                     model.baseEvents[eventName].unsubscribe(updateProps);
                 });
             };
         });
-        react_1.useEffect(() => () => {
-            Object.keys(model.baseEvents).forEach((eventName) => {
-                model.baseEvents[eventName].unsubscribe(updateProps);
-            });
-        });
-        return (react_1.default.createElement(react_1.default.Fragment, null,
-            react_1.default.createElement(Component, Object.assign({}, props, { model: model }))));
+        return react_1.default.createElement(Component, Object.assign({}, props, { model: model }));
     };
     return Hoc;
 }
