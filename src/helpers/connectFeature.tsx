@@ -26,9 +26,7 @@ export function connectFeature<
 
       Object.keys(feature.baseEvents).forEach((eventName) => {
         feature.baseEvents[eventName as connectFeatureEventType].subscribe(
-          () => {
-            updateProps();
-          }
+          updateProps
         );
       });
 

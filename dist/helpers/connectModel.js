@@ -31,9 +31,7 @@ function connectModel(callback, Component, model) {
         react_1.useEffect(() => {
             ref.current = props;
             Object.keys(model.baseEvents).forEach((eventName) => {
-                model.baseEvents[eventName].subscribe(() => {
-                    updateProps();
-                });
+                model.baseEvents[eventName].subscribe(updateProps);
             });
             return () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

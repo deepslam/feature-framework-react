@@ -23,9 +23,9 @@ export function connectModel<
       ref.current = props;
 
       Object.keys(model.baseEvents).forEach((eventName) => {
-        model.baseEvents[eventName as connectModelEventType].subscribe(() => {
-          updateProps();
-        });
+        model.baseEvents[eventName as connectModelEventType].subscribe(
+          updateProps
+        );
       });
 
       return () => {

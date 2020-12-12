@@ -35,9 +35,7 @@ function connectApp(callback, Component, events = ["onUpdate"]) {
         react_1.useEffect(() => {
             ref.current = props;
             events.forEach((event) => {
-                app.baseEvents[event].subscribe(() => {
-                    updateProps();
-                });
+                app.baseEvents[event].subscribe(updateProps);
             });
             return () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

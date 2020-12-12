@@ -31,9 +31,7 @@ export function connectCollection<
 
       Object.keys(collection.events).forEach((eventName) => {
         collection.events[eventName as connectCollectionEventType].subscribe(
-          () => {
-            updateProps();
-          }
+          updateProps
         );
       });
 

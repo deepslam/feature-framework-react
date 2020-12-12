@@ -31,9 +31,7 @@ function connectFeature(callback, Component, feature) {
         react_1.useEffect(() => {
             ref.current = props;
             Object.keys(feature.baseEvents).forEach((eventName) => {
-                feature.baseEvents[eventName].subscribe(() => {
-                    updateProps();
-                });
+                feature.baseEvents[eventName].subscribe(updateProps);
             });
             return () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

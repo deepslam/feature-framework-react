@@ -30,9 +30,7 @@ export function connectApp<
     useEffect(() => {
       ref.current = props;
       events.forEach((event) => {
-        app.baseEvents[event].subscribe(() => {
-          updateProps();
-        });
+        app.baseEvents[event].subscribe(updateProps);
       });
 
       return () => {

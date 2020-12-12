@@ -31,9 +31,7 @@ function connectCollection(callback, Component, collection) {
         react_1.useEffect(() => {
             ref.current = props;
             Object.keys(collection.events).forEach((eventName) => {
-                collection.events[eventName].subscribe(() => {
-                    updateProps();
-                });
+                collection.events[eventName].subscribe(updateProps);
             });
             return () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
