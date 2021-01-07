@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectCollection = void 0;
 const react_1 = __importStar(require("react"));
 function connectCollection(callback, Component, collection) {
-    const Hoc = () => {
+    const Hoc = (ownProps) => {
         const [props, setProps] = react_1.useState(callback(collection));
         const ref = react_1.default.useRef(props);
         const updateProps = () => {
@@ -42,7 +42,7 @@ function connectCollection(callback, Component, collection) {
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props, { collection: collection }));
+        return react_1.default.createElement(Component, Object.assign({}, props, ownProps, { collection: collection }));
     };
     return Hoc;
 }

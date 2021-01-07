@@ -8,15 +8,18 @@ export type withAppProps<A extends IApp<any>> = {
 
 export type connectAppEventType = "onUpdate" | "onFeatureUpdated";
 
+export type connectAppOwnPropsType = Record<string, any>;
+
 export function connectApp<
   P extends Record<string, unknown>,
-  A extends IApp<any>
+  A extends IApp<any>,
+  O extends connectAppOwnPropsType = connectAppOwnPropsType
 >(
-  callback: (app: A) => P,
+  callback: (app: A, ownProps?: O) => P,
   Component: React.ComponentType<P & withAppProps<A>>,
   events: connectAppEventType[] = ["onUpdate"]
 ) {
-  const Hoc = (): JSX.Element => {
+  const Hoc = (ownProps?: O): JSX.Element => {
     const app = useContext(AppContext) as A;
     const [props, setProps] = useState(callback(app));
     const ref = React.useRef<P>(props);
@@ -43,7 +46,7 @@ export function connectApp<
       };
     });
 
-    return <Component {...props} app={app} />;
+    return <Component {...props} {...ownProps} app={app} />;
   };
 
   return Hoc;

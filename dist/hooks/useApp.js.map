@@ -1,1 +1,1 @@
-{"version":3,"file":"useApp.js","sourceRoot":"","sources":["../../src/hooks/useApp.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AAEnC,0DAAsD;AAE/C,MAAM,MAAM,GAAG,GAA2B,EAAE;IACjD,OAAO,kBAAU,CAAC,wBAAU,CAAM,CAAC;AACrC,CAAC,CAAC;AAFW,QAAA,MAAM,UAEjB"}
+{"version":3,"file":"useApp.js","sourceRoot":"","sources":["../../src/hooks/useApp.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AAEnC,0DAAsD;AAEzC,QAAA,MAAM,GAAG,GAA2B,EAAE;IACjD,OAAO,kBAAU,CAAC,wBAAU,CAAM,CAAC;AACrC,CAAC,CAAC"}

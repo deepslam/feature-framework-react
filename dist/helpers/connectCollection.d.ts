@@ -5,4 +5,5 @@ export declare type withCollectionProps<C extends IDataCollection<unknown>> = {
     onAddItem?: () => void;
 };
 export declare type connectCollectionEventType = keyof DataCollectionStandardEventsType<IDataCollection<unknown>>;
-export declare function connectCollection<P extends Record<string, unknown>, C extends IDataCollection<Model>>(callback: (c: C) => P, Component: React.ComponentType<P>, collection: C): () => JSX.Element;
+export declare type connectCollectionOwnPropsType = Record<string, any>;
+export declare function connectCollection<P extends Record<string, unknown>, C extends IDataCollection<Model>, O extends connectCollectionOwnPropsType = connectCollectionOwnPropsType>(callback: (c: C, ownProps?: O) => P, Component: React.ComponentType<P & O>, collection: C): (ownProps: O) => JSX.Element;

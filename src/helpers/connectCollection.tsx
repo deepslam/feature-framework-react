@@ -14,16 +14,23 @@ export type connectCollectionEventType = keyof DataCollectionStandardEventsType<
   IDataCollection<unknown>
 >;
 
+export type connectCollectionOwnPropsType = Record<string, any>;
+
 export function connectCollection<
   P extends Record<string, unknown>,
-  C extends IDataCollection<Model>
->(callback: (c: C) => P, Component: React.ComponentType<P>, collection: C) {
-  const Hoc = (): JSX.Element => {
-    const [props, setProps] = useState(callback(collection));
+  C extends IDataCollection<Model>,
+  O extends connectCollectionOwnPropsType = connectCollectionOwnPropsType
+>(
+  callback: (c: C, ownProps: O) => P & O,
+  Component: React.ComponentType<P & O>,
+  collection: C
+) {
+  const Hoc = (ownProps: O): JSX.Element => {
+    const [props, setProps] = useState(callback(collection, ownProps));
     const ref = React.useRef<P>(props);
 
     const updateProps = () => {
-      setProps({ ...callback(collection) });
+      setProps({ ...callback(collection, ownProps) });
     };
 
     useEffect(() => {
@@ -47,7 +54,7 @@ export function connectCollection<
       };
     });
 
-    return <Component {...props} collection={collection} />;
+    return <Component {...props} {...ownProps} collection={collection} />;
   };
 
   return Hoc;
