@@ -8,28 +8,14 @@ type titlePropsType = {
   title: string;
 } & withModelProps<TestModel>;
 
-type titleOwnPropsType = {
-  loading: boolean;
-};
-
-const modelToProps = (
-  model: TestModel,
-  ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
-  expect(ownProps).not.toBeUndefined();
-  expect(ownProps).toHaveProperty("loading");
+const modelToProps = (model: TestModel): titlePropsType => {
   return {
     title: model.fields.name,
     model,
-    loading: (ownProps && ownProps.loading) || false,
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
-  if (props.loading) {
-    return <div data-testid="title">loading</div>;
-  }
-
+function title(props: titlePropsType) {
   return (
     <div data-testid="title-container">
       <p data-testid="title">{props.title}</p>
@@ -44,22 +30,16 @@ function title(props: titlePropsType & titleOwnPropsType) {
   );
 }
 
-function App({
-  model,
-  loading = false,
-}: {
-  model: TestModel;
-  loading: boolean;
-}) {
-  const ConnectedTitle = connectModel<
-    titlePropsType,
-    TestModel,
-    titleOwnPropsType
-  >(modelToProps, title, model);
-  return <ConnectedTitle loading={loading} />;
+function App({ model }: { model: TestModel }) {
+  const ConnectedTitle = connectModel<titlePropsType, TestModel>(
+    modelToProps,
+    title,
+    model
+  );
+  return <ConnectedTitle />;
 }
 
-describe("connectModel test", () => {
+describe("connectModel without own props test", () => {
   test("test that a model can handle changing correctly", async () => {
     const updateModelListener = jest.fn();
 
@@ -70,7 +50,7 @@ describe("connectModel test", () => {
 
     model.baseEvents.updated.subscribe(updateModelListener);
 
-    const instance = render(<App model={model} loading={false} />);
+    const instance = render(<App model={model} />);
 
     expect(instance.getByTestId("title").textContent).toBe("test");
 
@@ -79,9 +59,5 @@ describe("connectModel test", () => {
     expect(updateModelListener).toHaveBeenCalledTimes(2);
 
     expect(instance.getByTestId("title").textContent).toBe("test_2");
-
-    instance.rerender(<App model={model} loading={true} />);
-
-    expect(instance.getByTestId("title").textContent).toBe("loading");
   });
 });

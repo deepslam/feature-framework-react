@@ -1,10 +1,7 @@
+/* eslint-disable react/display-name */
 import React, { useEffect, useState, useContext } from "react";
 import { IApp } from "@feature-framework/core";
 import { AppContext } from "../providers/AppProvider";
-
-export type withAppProps<A extends IApp<any>> = {
-  app: A;
-};
 
 export type connectAppEventType = "onUpdate" | "onFeatureUpdated";
 
@@ -15,18 +12,18 @@ export function connectApp<
   A extends IApp<any>,
   O extends connectAppOwnPropsType = connectAppOwnPropsType
 >(
-  callback: (app: A, ownProps?: O) => P,
-  Component: React.ComponentType<P & withAppProps<A>>,
+  callback: (app: A, ownProps?: O) => P & O,
+  Component: React.ComponentType<P & O>,
   events: connectAppEventType[] = ["onUpdate"]
 ) {
-  const Hoc = (ownProps?: O): JSX.Element => {
+  const hoc = (ownProps: O): JSX.Element => {
     const app = useContext(AppContext) as A;
-    const [props, setProps] = useState(callback(app));
-    const ref = React.useRef<P>(props);
+    const [props, setProps] = useState(callback(app, ownProps));
+    const ref = React.useRef<P & O>(props);
 
     const updateProps = () => {
       if (app && app.isInitialized()) {
-        setProps({ ...callback(app) });
+        setProps({ ...callback(app, ownProps) });
       }
     };
 
@@ -46,8 +43,8 @@ export function connectApp<
       };
     });
 
-    return <Component {...props} {...ownProps} app={app} />;
+    return <Component {...props} {...ownProps} />;
   };
 
-  return Hoc;
+  return hoc;
 }

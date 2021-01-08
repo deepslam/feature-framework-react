@@ -9,16 +9,23 @@ export type connectFeatureEventType = keyof FeatureStandardEventsType<
   IFeature<any, any>
 >;
 
+export type connectFeatureOwnPropsType = Record<string, any>;
+
 export function connectFeature<
   P extends Record<string, unknown>,
-  F extends IFeature<any, any>
->(callback: (f: F) => P, Component: React.ComponentType<P>, feature: F) {
-  const Hoc = (): JSX.Element => {
-    const [props, setProps] = useState(callback(feature));
+  F extends IFeature<any, any>,
+  O extends connectFeatureOwnPropsType = connectFeatureOwnPropsType
+>(
+  callback: (f: F, ownProps?: O) => P & O,
+  Component: React.ComponentType<P & O>,
+  feature: F
+) {
+  const Hoc = (ownProps: O): JSX.Element => {
+    const [props, setProps] = useState(callback(feature, ownProps));
     const ref = React.useRef<P>(props);
 
     const updateProps = () => {
-      setProps({ ...callback(feature) });
+      setProps({ ...callback(feature, ownProps) });
     };
 
     useEffect(() => {
@@ -42,7 +49,7 @@ export function connectFeature<
       };
     });
 
-    return <Component {...props} />;
+    return <Component {...props} {...ownProps} />;
   };
 
   return Hoc;

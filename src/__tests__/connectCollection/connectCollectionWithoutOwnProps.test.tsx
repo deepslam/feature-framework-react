@@ -12,28 +12,14 @@ type titlePropsType = {
   items: TestModel[];
 } & withCollectionProps<TestModelCollection>;
 
-type titleOwnPropsType = {
-  loading: boolean;
-};
-
-const collectionToProps = (
-  collection: TestModelCollection,
-  ownProps: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
-  expect(ownProps).not.toBeUndefined();
-  expect(ownProps).toHaveProperty("loading");
+const collectionToProps = (collection: TestModelCollection): titlePropsType => {
   return {
     items: collection.toArray(),
     collection,
-    loading: ownProps.loading,
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
-  if (props.loading) {
-    return <p data-testid="title">loading</p>;
-  }
-
+function title(props: titlePropsType) {
   return (
     <div data-testid="title-container">
       <p data-testid="title">{props.items.map((item) => item.fields.id)}</p>
@@ -60,23 +46,17 @@ function title(props: titlePropsType & titleOwnPropsType) {
   );
 }
 
-function App({
-  collection,
-  loading = false,
-}: {
-  collection: TestModelCollection;
-  loading?: boolean;
-}) {
-  const ConnectedTitle = connectCollection<
-    titlePropsType,
-    TestModelCollection,
-    titleOwnPropsType
-  >(collectionToProps, title, collection);
+function App({ collection }: { collection: TestModelCollection }) {
+  const ConnectedTitle = connectCollection<titlePropsType, TestModelCollection>(
+    collectionToProps,
+    title,
+    collection
+  );
 
-  return <ConnectedTitle loading={loading} />;
+  return <ConnectedTitle />;
 }
 
-describe("connectCollection test", () => {
+describe("connectCollection without own props test", () => {
   test("test creating, changing and deleting elements", async () => {
     const updateCollectionListener = jest.fn();
 
@@ -108,9 +88,5 @@ describe("connectCollection test", () => {
     fireEvent.click(instance.getByTestId("btn-clear"));
 
     expect(instance.getByTestId("title").textContent).toBe("");
-
-    instance.rerender(<App collection={collection} loading={true} />);
-
-    expect(instance.getByTestId("title").textContent).toBe("loading");
   });
 });

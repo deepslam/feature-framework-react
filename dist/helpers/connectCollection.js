@@ -23,10 +23,10 @@ exports.connectCollection = void 0;
 const react_1 = __importStar(require("react"));
 function connectCollection(callback, Component, collection) {
     const Hoc = (ownProps) => {
-        const [props, setProps] = react_1.useState(callback(collection));
+        const [props, setProps] = react_1.useState(callback(collection, ownProps));
         const ref = react_1.default.useRef(props);
         const updateProps = () => {
-            setProps(Object.assign({}, callback(collection)));
+            setProps(Object.assign({}, callback(collection, ownProps)));
         };
         react_1.useEffect(() => {
             ref.current = props;

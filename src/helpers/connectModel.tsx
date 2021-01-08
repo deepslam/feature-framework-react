@@ -7,16 +7,23 @@ export type withModelProps<M extends IModel> = {
 
 export type connectModelEventType = keyof ModelStandardEventsType<IModel>;
 
+export type connectModelOwnPropsType = Record<string, any>;
+
 export function connectModel<
   P extends Record<string, unknown>,
-  M extends IModel
->(callback: (m: M) => P, Component: React.ComponentType<P>, model: M) {
-  const Hoc = (): JSX.Element => {
-    const [props, setProps] = useState(callback(model));
+  M extends IModel,
+  O extends connectModelOwnPropsType = connectModelOwnPropsType
+>(
+  callback: (m: M, ownProps?: O) => P & O,
+  Component: React.ComponentType<P & O>,
+  model: M
+) {
+  const Hoc = (ownProps: O): JSX.Element => {
+    const [props, setProps] = useState(callback(model, ownProps));
     const ref = React.useRef<P>(props);
 
     const updateProps = () => {
-      setProps({ ...callback(model) });
+      setProps({ ...callback(model, ownProps) });
     };
 
     useEffect(() => {
@@ -40,7 +47,7 @@ export function connectModel<
       };
     });
 
-    return <Component {...props} model={model} />;
+    return <Component {...props} {...ownProps} />;
   };
 
   return Hoc;

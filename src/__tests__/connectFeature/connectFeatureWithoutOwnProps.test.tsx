@@ -10,28 +10,14 @@ type titlePropsType = {
   feature: TestFeature;
 };
 
-type titleOwnPropsType = {
-  loading: boolean;
-};
-
-const featureToProps = (
-  feature: TestFeature,
-  ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
-  expect(ownProps).not.toBeUndefined();
-  expect(ownProps).toHaveProperty("loading");
+const featureToProps = (feature: TestFeature): titlePropsType => {
   return {
     title: feature.cfg().title || "not_set",
     feature,
-    loading: (ownProps && ownProps.loading) || false,
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
-  if (props.loading) {
-    return <div data-testid="title">loading</div>;
-  }
-
+function title(props: titlePropsType) {
   return (
     <div data-testid="title-container">
       <p data-testid="title">{props.title}</p>
@@ -47,23 +33,17 @@ function title(props: titlePropsType & titleOwnPropsType) {
   );
 }
 
-function App({
-  feature,
-  loading = false,
-}: {
-  feature: TestFeature;
-  loading: boolean;
-}) {
-  const ConnectedTitle = connectFeature<
-    titlePropsType,
-    TestFeature,
-    titleOwnPropsType
-  >(featureToProps, title, feature);
+function App({ feature }: { feature: TestFeature }) {
+  const ConnectedTitle = connectFeature<titlePropsType, TestFeature>(
+    featureToProps,
+    title,
+    feature
+  );
 
-  return <ConnectedTitle loading={loading} />;
+  return <ConnectedTitle />;
 }
 
-describe("connectFeature test", () => {
+describe("connectFeature without own props test", () => {
   test("test that a feature can handle changing correctly", async () => {
     const updateFeatureListener = jest.fn();
     const app = new TestApp({ config: { title: "new app" } });
@@ -81,7 +61,7 @@ describe("connectFeature test", () => {
 
     feature.baseEvents.onUpdate.subscribe(updateFeatureListener);
 
-    const instance = render(<App feature={feature} loading={false} />);
+    const instance = render(<App feature={feature} />);
 
     expect(instance.getByTestId("title").textContent).toBe("not_set");
 
@@ -90,9 +70,5 @@ describe("connectFeature test", () => {
     expect(updateFeatureListener).toHaveBeenCalledTimes(1);
 
     expect(instance.getByTestId("title").textContent).toBe("test");
-
-    instance.rerender(<App feature={feature} loading={true} />);
-
-    expect(instance.getByTestId("title").textContent).toBe("loading");
   });
 });

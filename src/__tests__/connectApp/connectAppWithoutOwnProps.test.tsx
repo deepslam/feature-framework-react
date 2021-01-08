@@ -11,27 +11,14 @@ type titlePropsType = {
   app: TestApp;
 };
 
-type titleOwnPropsType = {
-  loading: boolean;
-};
-
-const appToProps = (
-  application: TestApp,
-  ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
-  expect(ownProps).not.toBeUndefined();
-  expect(ownProps).toHaveProperty("loading");
+const appToProps = (application: TestApp): titlePropsType => {
   return {
     title: application.config.title,
     app: application,
-    loading: (ownProps && ownProps.loading) || false,
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
-  if (props.loading) {
-    return <div data-testid="title">loading</div>;
-  }
+function title(props: titlePropsType) {
   return (
     <div data-testid="title-container">
       <p data-testid="title">{props.title}</p>
@@ -43,8 +30,8 @@ function title(props: titlePropsType & titleOwnPropsType) {
   );
 }
 
-function App({ app, loading = false }: { app: TestApp; loading?: boolean }) {
-  const ConnectedTitle = connectApp<titlePropsType, TestApp, titleOwnPropsType>(
+function App({ app }: { app: TestApp }) {
+  const ConnectedTitle = connectApp<titlePropsType, TestApp>(
     appToProps,
     title,
     ["onUpdate"]
@@ -52,12 +39,12 @@ function App({ app, loading = false }: { app: TestApp; loading?: boolean }) {
 
   return (
     <AppProvider app={app}>
-      <ConnectedTitle loading={loading} />
+      <ConnectedTitle />
     </AppProvider>
   );
 }
 
-describe("AppProvider and connectApp test", () => {
+describe("AppProvider and connectApp without own props test", () => {
   test("test default props", async () => {
     const app = new TestApp({
       config: {
@@ -71,7 +58,7 @@ describe("AppProvider and connectApp test", () => {
       },
     });
 
-    const instance = render(<App app={app} loading={false} />);
+    const instance = render(<App app={app} />);
 
     expect(instance.getByTestId("title").textContent).toBe("test");
   });
@@ -126,9 +113,5 @@ describe("AppProvider and connectApp test", () => {
     expect(app.config.title).toBe("newTitle");
 
     expect(instance.getByTestId("title").textContent).toBe("newTitle");
-
-    instance.rerender(<App app={app} loading={true} />);
-
-    expect(instance.getByTestId("title").textContent).toBe("loading");
   });
 });

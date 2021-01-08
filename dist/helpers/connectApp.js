@@ -20,16 +20,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectApp = void 0;
+/* eslint-disable react/display-name */
 const react_1 = __importStar(require("react"));
 const AppProvider_1 = require("../providers/AppProvider");
 function connectApp(callback, Component, events = ["onUpdate"]) {
-    const Hoc = () => {
+    const hoc = (ownProps) => {
         const app = react_1.useContext(AppProvider_1.AppContext);
-        const [props, setProps] = react_1.useState(callback(app));
+        const [props, setProps] = react_1.useState(callback(app, ownProps));
         const ref = react_1.default.useRef(props);
         const updateProps = () => {
             if (app && app.isInitialized()) {
-                setProps(Object.assign({}, callback(app)));
+                setProps(Object.assign({}, callback(app, ownProps)));
             }
         };
         react_1.useEffect(() => {
@@ -46,9 +47,9 @@ function connectApp(callback, Component, events = ["onUpdate"]) {
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props, { app: app }));
+        return react_1.default.createElement(Component, Object.assign({}, props, ownProps));
     };
-    return Hoc;
+    return hoc;
 }
 exports.connectApp = connectApp;
 //# sourceMappingURL=connectApp.js.map

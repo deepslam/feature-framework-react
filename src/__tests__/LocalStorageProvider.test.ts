@@ -1,7 +1,5 @@
 import LocalStorageDataProvider from "../providers/LocalStorageDataProvider";
 
-const saveMap = new Map();
-
 describe("Async storage test", () => {
   it("Should load and save data correctly", async () => {
     const provider = new LocalStorageDataProvider();

@@ -22,11 +22,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectModel = void 0;
 const react_1 = __importStar(require("react"));
 function connectModel(callback, Component, model) {
-    const Hoc = () => {
-        const [props, setProps] = react_1.useState(callback(model));
+    const Hoc = (ownProps) => {
+        const [props, setProps] = react_1.useState(callback(model, ownProps));
         const ref = react_1.default.useRef(props);
         const updateProps = () => {
-            setProps(Object.assign({}, callback(model)));
+            setProps(Object.assign({}, callback(model, ownProps)));
         };
         react_1.useEffect(() => {
             ref.current = props;
@@ -42,7 +42,7 @@ function connectModel(callback, Component, model) {
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props, { model: model }));
+        return react_1.default.createElement(Component, Object.assign({}, props, ownProps));
     };
     return Hoc;
 }

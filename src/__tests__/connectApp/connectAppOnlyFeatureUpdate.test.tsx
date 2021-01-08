@@ -11,37 +11,51 @@ type titlePropsType = {
   app: TestApp;
 };
 
-const appToProps = (application: TestApp): titlePropsType => {
+type titleOwnPropsType = {
+  loading: boolean;
+};
+
+const appToProps = (
+  application: TestApp,
+  ownProps: titleOwnPropsType
+): titlePropsType & titleOwnPropsType => {
   return {
     version: application.isInitialized()
       ? application.features().testFeature.config.version
       : "",
     app: application,
+    loading: ownProps.loading,
   };
 };
 
-function title(props: titlePropsType) {
+function title(props: titlePropsType & titleOwnPropsType) {
+  if (props.loading) {
+    return <p data-testid="title">loading</p>;
+  }
+
   return (
     <div data-testid="title-container">
       <p data-testid="title">{props.version}</p>
       <button
         data-testid="btn"
         onClick={() =>
-          props.app.features().testFeature.extendConfig({ version: "1.0.1" })
+          props.app.features().testFeature.updateConfig({ version: "1.0.1" })
         }
       />
     </div>
   );
 }
 
-function ConnectedTitle() {
-  return connectApp(appToProps, title, ["onFeatureUpdated"])();
-}
+function App({ app, loading = false }: { app: TestApp; loading?: boolean }) {
+  const ConnectedTitle = connectApp<titlePropsType, TestApp, titleOwnPropsType>(
+    appToProps,
+    title,
+    ["onFeatureUpdated"]
+  );
 
-function App({ app }: { app: TestApp }) {
   return (
     <AppProvider app={app}>
-      <ConnectedTitle />
+      <ConnectedTitle loading={loading} />
     </AppProvider>
   );
 }
@@ -104,5 +118,9 @@ describe("AppProvider and connectApp test", () => {
     expect(app.features().testFeature.config.version).toBe("1.0.1");
 
     expect(instance.getByTestId("title").textContent).toBe("1.0.1");
+
+    instance.rerender(<App app={app} loading={true} />);
+
+    expect(instance.getByTestId("title").textContent).toBe("loading");
   });
 });
