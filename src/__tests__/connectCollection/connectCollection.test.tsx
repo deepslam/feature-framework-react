@@ -18,14 +18,14 @@ type titleOwnPropsType = {
 
 const collectionToProps = (
   collection: TestModelCollection,
-  ownProps: titleOwnPropsType
+  ownProps?: titleOwnPropsType
 ): titlePropsType & titleOwnPropsType => {
   expect(ownProps).not.toBeUndefined();
   expect(ownProps).toHaveProperty("loading");
   return {
     items: collection.toArray(),
     collection,
-    loading: ownProps.loading,
+    loading: (ownProps && ownProps.loading) || false,
   };
 };
 

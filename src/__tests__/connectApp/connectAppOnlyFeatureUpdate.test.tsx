@@ -17,14 +17,14 @@ type titleOwnPropsType = {
 
 const appToProps = (
   application: TestApp,
-  ownProps: titleOwnPropsType
+  ownProps?: titleOwnPropsType
 ): titlePropsType & titleOwnPropsType => {
   return {
     version: application.isInitialized()
       ? application.features().testFeature.config.version
       : "",
     app: application,
-    loading: ownProps.loading,
+    loading: (ownProps && ownProps.loading) || false,
   };
 };
 
