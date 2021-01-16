@@ -12,14 +12,14 @@ export function connectApp<
   A extends IApp<any>,
   O extends connectAppOwnPropsType = connectAppOwnPropsType
 >(
-  callback: (app: A, ownProps?: O) => P & O,
-  Component: React.ComponentType<P & O>,
+  callback: (app: A, ownProps?: O) => P,
+  Component: React.ComponentType<P>,
   events: connectAppEventType[] = ["onUpdate"]
 ) {
   const hoc = (ownProps: O): JSX.Element => {
     const app = useContext(AppContext) as A;
     const [props, setProps] = useState(callback(app, ownProps));
-    const ref = React.useRef<P & O>(props);
+    const ref = React.useRef<P>(props);
 
     const updateProps = () => {
       if (app && app.isInitialized()) {
@@ -43,7 +43,7 @@ export function connectApp<
       };
     });
 
-    return <Component {...props} {...ownProps} />;
+    return <Component {...props} />;
   };
 
   return hoc;

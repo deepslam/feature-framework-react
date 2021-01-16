@@ -21,13 +21,13 @@ export function connectCollection<
   C extends IDataCollection<Model>,
   O extends connectCollectionOwnPropsType = connectCollectionOwnPropsType
 >(
-  callback: (c: C, ownProps?: O) => P & O,
-  Component: React.ComponentType<P & O>,
+  callback: (c: C, ownProps?: O) => P,
+  Component: React.ComponentType<P>,
   collection: C
 ) {
   const Hoc = (ownProps: O): JSX.Element => {
     const [props, setProps] = useState(callback(collection, ownProps));
-    const ref = React.useRef<P & O>(props);
+    const ref = React.useRef<P>(props);
 
     const updateProps = () => {
       setProps({ ...callback(collection, ownProps) });
@@ -54,7 +54,7 @@ export function connectCollection<
       };
     });
 
-    return <Component {...props} {...ownProps} collection={collection} />;
+    return <Component {...props} />;
   };
 
   return Hoc;

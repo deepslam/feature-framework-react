@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import React from "react";
+import React, { BlockquoteHTMLAttributes } from "react";
 import { render, fireEvent } from "@testing-library/react";
 import {
   connectCollection,
@@ -10,6 +10,7 @@ import TestModel from "../TestModel";
 
 type titlePropsType = {
   items: TestModel[];
+  loading: boolean;
 } & withCollectionProps<TestModelCollection>;
 
 type titleOwnPropsType = {
@@ -19,7 +20,7 @@ type titleOwnPropsType = {
 const collectionToProps = (
   collection: TestModelCollection,
   ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
+): titlePropsType => {
   expect(ownProps).not.toBeUndefined();
   expect(ownProps).toHaveProperty("loading");
   return {
@@ -29,7 +30,7 @@ const collectionToProps = (
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
+function title(props: titlePropsType) {
   if (props.loading) {
     return <p data-testid="title">loading</p>;
   }

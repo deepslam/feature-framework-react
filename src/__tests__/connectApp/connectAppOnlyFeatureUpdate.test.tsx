@@ -9,7 +9,7 @@ import TestFeature from "../TestFeature";
 type titlePropsType = {
   version: string;
   app: TestApp;
-};
+} & titleOwnPropsType;
 
 type titleOwnPropsType = {
   loading: boolean;
@@ -18,7 +18,7 @@ type titleOwnPropsType = {
 const appToProps = (
   application: TestApp,
   ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
+): titlePropsType => {
   return {
     version: application.isInitialized()
       ? application.features().testFeature.config.version
@@ -28,7 +28,7 @@ const appToProps = (
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
+function title(props: titlePropsType) {
   if (props.loading) {
     return <p data-testid="title">loading</p>;
   }

@@ -21,7 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectFeature = void 0;
 const react_1 = __importStar(require("react"));
-function connectFeature(callback, Component, feature) {
+function connectFeature(callback, Component, feature, events = ["onUpdate"]) {
     const Hoc = (ownProps) => {
         const [props, setProps] = react_1.useState(callback(feature, ownProps));
         const ref = react_1.default.useRef(props);
@@ -30,19 +30,29 @@ function connectFeature(callback, Component, feature) {
         };
         react_1.useEffect(() => {
             ref.current = props;
-            Object.keys(feature.baseEvents).forEach((eventName) => {
-                feature.baseEvents[eventName].subscribe(updateProps);
+            events.forEach((event) => {
+                if (feature.baseEvents[event]) {
+                    feature.baseEvents[event].subscribe(updateProps);
+                }
+                if (feature.events[event]) {
+                    feature.events[event].subscribe(updateProps);
+                }
             });
             return () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 ref.current = false;
-                Object.keys(feature.baseEvents).forEach((eventName) => {
-                    feature.baseEvents[eventName].unsubscribe(updateProps);
+                events.forEach((event) => {
+                    if (feature.baseEvents[event]) {
+                        feature.baseEvents[event].subscribe(updateProps);
+                    }
+                    if (feature.events[event]) {
+                        feature.events[event].subscribe(updateProps);
+                    }
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props, ownProps));
+        return react_1.default.createElement(Component, Object.assign({}, props));
     };
     return Hoc;
 }

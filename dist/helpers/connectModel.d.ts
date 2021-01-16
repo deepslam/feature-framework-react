@@ -5,4 +5,4 @@ export declare type withModelProps<M extends IModel> = {
 };
 export declare type connectModelEventType = keyof ModelStandardEventsType<IModel>;
 export declare type connectModelOwnPropsType = Record<string, any>;
-export declare function connectModel<P extends Record<string, unknown>, M extends IModel, O extends connectModelOwnPropsType = connectModelOwnPropsType>(callback: (m: M, ownProps?: O) => P & O, Component: React.ComponentType<P & O>, model: M): (ownProps: O) => JSX.Element;
+export declare function connectModel<P extends Record<string, unknown>, M extends IModel, O extends connectModelOwnPropsType = connectModelOwnPropsType>(callback: (m: M, ownProps?: O) => P, Component: React.ComponentType<P>, model: M): (ownProps: O) => JSX.Element;

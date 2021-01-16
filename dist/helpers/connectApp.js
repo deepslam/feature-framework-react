@@ -47,7 +47,7 @@ function connectApp(callback, Component, events = ["onUpdate"]) {
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props, ownProps));
+        return react_1.default.createElement(Component, Object.assign({}, props));
     };
     return hoc;
 }

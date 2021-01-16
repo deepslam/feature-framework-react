@@ -8,6 +8,7 @@ import TestFeature from "../TestFeature";
 type titlePropsType = {
   title: string;
   feature: TestFeature;
+  loading: boolean;
 };
 
 type titleOwnPropsType = {
@@ -17,7 +18,7 @@ type titleOwnPropsType = {
 const featureToProps = (
   feature: TestFeature,
   ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
+): titlePropsType => {
   expect(ownProps).not.toBeUndefined();
   expect(ownProps).toHaveProperty("loading");
   return {
@@ -27,7 +28,7 @@ const featureToProps = (
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
+function title(props: titlePropsType) {
   if (props.loading) {
     return <div data-testid="title">loading</div>;
   }

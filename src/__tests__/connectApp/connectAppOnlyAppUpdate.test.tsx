@@ -9,7 +9,7 @@ import TestFeature from "../TestFeature";
 type titlePropsType = {
   title: string;
   app: TestApp;
-};
+} & titleOwnPropsType;
 
 type titleOwnPropsType = {
   loading: boolean;
@@ -18,7 +18,7 @@ type titleOwnPropsType = {
 const appToProps = (
   application: TestApp,
   ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
+): titlePropsType => {
   expect(ownProps).not.toBeUndefined();
   expect(ownProps).toHaveProperty("loading");
   return {

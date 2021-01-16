@@ -6,6 +6,7 @@ import TestModel from "../TestModel";
 
 type titlePropsType = {
   title: string;
+  loading: boolean;
 } & withModelProps<TestModel>;
 
 type titleOwnPropsType = {
@@ -15,7 +16,7 @@ type titleOwnPropsType = {
 const modelToProps = (
   model: TestModel,
   ownProps?: titleOwnPropsType
-): titlePropsType & titleOwnPropsType => {
+): titlePropsType => {
   expect(ownProps).not.toBeUndefined();
   expect(ownProps).toHaveProperty("loading");
   return {
@@ -25,7 +26,7 @@ const modelToProps = (
   };
 };
 
-function title(props: titlePropsType & titleOwnPropsType) {
+function title(props: titlePropsType) {
   if (props.loading) {
     return <div data-testid="title">loading</div>;
   }

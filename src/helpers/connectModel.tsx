@@ -14,8 +14,8 @@ export function connectModel<
   M extends IModel,
   O extends connectModelOwnPropsType = connectModelOwnPropsType
 >(
-  callback: (m: M, ownProps?: O) => P & O,
-  Component: React.ComponentType<P & O>,
+  callback: (m: M, ownProps?: O) => P,
+  Component: React.ComponentType<P>,
   model: M
 ) {
   const Hoc = (ownProps: O): JSX.Element => {
@@ -47,7 +47,7 @@ export function connectModel<
       };
     });
 
-    return <Component {...props} {...ownProps} />;
+    return <Component {...props} />;
   };
 
   return Hoc;

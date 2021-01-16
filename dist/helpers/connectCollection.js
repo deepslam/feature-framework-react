@@ -42,7 +42,7 @@ function connectCollection(callback, Component, collection) {
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props, ownProps, { collection: collection }));
+        return react_1.default.createElement(Component, Object.assign({}, props));
     };
     return Hoc;
 }

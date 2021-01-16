@@ -16,9 +16,10 @@ export function connectFeature<
   F extends IFeature<any, any>,
   O extends connectFeatureOwnPropsType = connectFeatureOwnPropsType
 >(
-  callback: (f: F, ownProps?: O) => P & O,
-  Component: React.ComponentType<P & O>,
-  feature: F
+  callback: (f: F, ownProps?: O) => P,
+  Component: React.ComponentType<P>,
+  feature: F,
+  events: connectFeatureEventType[] | string[] = ["onUpdate"]
 ) {
   const Hoc = (ownProps: O): JSX.Element => {
     const [props, setProps] = useState(callback(feature, ownProps));
@@ -31,25 +32,35 @@ export function connectFeature<
     useEffect(() => {
       ref.current = props;
 
-      Object.keys(feature.baseEvents).forEach((eventName) => {
-        feature.baseEvents[eventName as connectFeatureEventType].subscribe(
-          updateProps
-        );
+      events.forEach((event) => {
+        if (feature.baseEvents[event as connectFeatureEventType]) {
+          feature.baseEvents[event as connectFeatureEventType].subscribe(
+            updateProps
+          );
+        }
+        if (feature.events[event as string]) {
+          feature.events[event].subscribe(updateProps);
+        }
       });
 
       return () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         ref.current = false;
-        Object.keys(feature.baseEvents).forEach((eventName) => {
-          feature.baseEvents[eventName as connectFeatureEventType].unsubscribe(
-            updateProps
-          );
+        events.forEach((event) => {
+          if (feature.baseEvents[event as connectFeatureEventType]) {
+            feature.baseEvents[event as connectFeatureEventType].subscribe(
+              updateProps
+            );
+          }
+          if (feature.events[event as string]) {
+            feature.events[event].subscribe(updateProps);
+          }
         });
       };
     });
 
-    return <Component {...props} {...ownProps} />;
+    return <Component {...props} />;
   };
 
   return Hoc;
