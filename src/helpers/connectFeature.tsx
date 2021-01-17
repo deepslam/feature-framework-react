@@ -49,12 +49,12 @@ export function connectFeature<
         ref.current = false;
         events.forEach((event) => {
           if (feature.baseEvents[event as connectFeatureEventType]) {
-            feature.baseEvents[event as connectFeatureEventType].subscribe(
+            feature.baseEvents[event as connectFeatureEventType].unsubscribe(
               updateProps
             );
           }
           if (feature.events[event as string]) {
-            feature.events[event].subscribe(updateProps);
+            feature.events[event].unsubscribe(updateProps);
           }
         });
       };

@@ -44,10 +44,10 @@ function connectFeature(callback, Component, feature, events = ["onUpdate"]) {
                 ref.current = false;
                 events.forEach((event) => {
                     if (feature.baseEvents[event]) {
-                        feature.baseEvents[event].subscribe(updateProps);
+                        feature.baseEvents[event].unsubscribe(updateProps);
                     }
                     if (feature.events[event]) {
-                        feature.events[event].subscribe(updateProps);
+                        feature.events[event].unsubscribe(updateProps);
                     }
                 });
             };
