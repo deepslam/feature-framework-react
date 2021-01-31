@@ -19,7 +19,7 @@ export function connectFeature<
   callback: (f: F, ownProps?: O) => P,
   Component: React.ComponentType<P>,
   feature: F,
-  events: connectFeatureEventType[] | string[] = ["onUpdate"]
+  events: connectFeatureEventType[] | string[] = ["onUpdate", "onDataUpdate"]
 ) {
   const Hoc = (ownProps: O): JSX.Element => {
     const [props, setProps] = useState(callback(feature, ownProps));

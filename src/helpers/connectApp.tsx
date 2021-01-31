@@ -1,9 +1,9 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState, useContext } from "react";
-import { IApp } from "@feature-framework/core";
+import { IApp, AppStandardEventsType } from "@feature-framework/core";
 import { AppContext } from "../providers/AppProvider";
 
-export type connectAppEventType = "onUpdate" | "onFeatureUpdated";
+export type connectAppEventType = keyof AppStandardEventsType<IApp<any>>;
 
 export type connectAppOwnPropsType = Record<string, any>;
 
@@ -14,7 +14,7 @@ export function connectApp<
 >(
   callback: (app: A, ownProps?: O) => P,
   Component: React.ComponentType<P>,
-  events: connectAppEventType[] = ["onUpdate"]
+  events: connectAppEventType[] = ["onUpdate", "onDataUpdate"]
 ) {
   const hoc = (ownProps: O): JSX.Element => {
     const app = useContext(AppContext) as A;

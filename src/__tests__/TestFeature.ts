@@ -6,6 +6,9 @@ type TestFeatureType = {
     version: string;
     title?: string;
   };
+  data: {
+    name: string;
+  };
   events: {
     onCustomUpdate: IEvent<any>;
   };

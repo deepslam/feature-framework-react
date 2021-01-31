@@ -48,7 +48,7 @@ describe("connectModel without own props test", () => {
       name: "test",
     });
 
-    model.baseEvents.updated.subscribe(updateModelListener);
+    model.baseEvents.onUpdate.subscribe(updateModelListener);
 
     const instance = render(<App model={model} />);
 

@@ -23,7 +23,7 @@ exports.connectApp = void 0;
 /* eslint-disable react/display-name */
 const react_1 = __importStar(require("react"));
 const AppProvider_1 = require("../providers/AppProvider");
-function connectApp(callback, Component, events = ["onUpdate"]) {
+function connectApp(callback, Component, events = ["onUpdate", "onDataUpdate"]) {
     const hoc = (ownProps) => {
         const app = react_1.useContext(AppProvider_1.AppContext);
         const [props, setProps] = react_1.useState(callback(app, ownProps));

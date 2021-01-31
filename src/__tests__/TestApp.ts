@@ -5,6 +5,9 @@ export type TestAppType = {
   config: {
     title: string;
   };
+  data: {
+    name: string;
+  };
   features: {
     testFeature: TestFeature;
   };
