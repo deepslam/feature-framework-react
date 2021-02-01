@@ -27,6 +27,10 @@ export function connectModel<
     };
 
     useEffect(() => {
+      updateProps();
+    }, Object.keys(ownProps));
+
+    useEffect(() => {
       ref.current = props;
 
       Object.keys(model.baseEvents).forEach((eventName) => {

@@ -28,6 +28,10 @@ export function connectApp<
     };
 
     useEffect(() => {
+      updateProps();
+    }, Object.keys(ownProps));
+
+    useEffect(() => {
       ref.current = props;
       events.forEach((event) => {
         app.baseEvents[event].subscribe(updateProps);

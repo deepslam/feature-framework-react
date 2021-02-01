@@ -29,6 +29,9 @@ function connectModel(callback, Component, model) {
             setProps(Object.assign({}, callback(model, ownProps)));
         };
         react_1.useEffect(() => {
+            updateProps();
+        }, Object.keys(ownProps));
+        react_1.useEffect(() => {
             ref.current = props;
             Object.keys(model.baseEvents).forEach((eventName) => {
                 model.baseEvents[eventName].subscribe(updateProps);

@@ -30,6 +30,10 @@ export function connectFeature<
     };
 
     useEffect(() => {
+      updateProps();
+    }, Object.keys(ownProps));
+
+    useEffect(() => {
       ref.current = props;
 
       events.forEach((event) => {

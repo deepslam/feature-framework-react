@@ -29,6 +29,9 @@ function connectCollection(callback, Component, collection) {
             setProps(Object.assign({}, callback(collection, ownProps)));
         };
         react_1.useEffect(() => {
+            updateProps();
+        }, Object.keys(ownProps));
+        react_1.useEffect(() => {
             ref.current = props;
             Object.keys(collection.events).forEach((eventName) => {
                 collection.events[eventName].subscribe(updateProps);

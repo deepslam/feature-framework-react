@@ -34,6 +34,10 @@ export function connectCollection<
     };
 
     useEffect(() => {
+      updateProps();
+    }, Object.keys(ownProps));
+
+    useEffect(() => {
       ref.current = props;
 
       Object.keys(collection.events).forEach((eventName) => {

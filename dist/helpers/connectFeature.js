@@ -29,6 +29,9 @@ function connectFeature(callback, Component, feature, events = ["onUpdate", "onD
             setProps(Object.assign({}, callback(feature, ownProps)));
         };
         react_1.useEffect(() => {
+            updateProps();
+        }, Object.keys(ownProps));
+        react_1.useEffect(() => {
             ref.current = props;
             events.forEach((event) => {
                 if (feature.baseEvents[event]) {
