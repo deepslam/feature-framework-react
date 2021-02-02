@@ -30,7 +30,7 @@ function connectFeature(callback, Component, feature, events = ["onUpdate", "onD
         };
         react_1.useEffect(() => {
             updateProps();
-        }, Object.keys(ownProps));
+        }, Object.values(ownProps));
         react_1.useEffect(() => {
             ref.current = props;
             events.forEach((event) => {
@@ -55,7 +55,7 @@ function connectFeature(callback, Component, feature, events = ["onUpdate", "onD
                 });
             };
         });
-        return react_1.default.createElement(Component, Object.assign({}, props));
+        return react_1.default.createElement(Component, Object.assign({}, props, ownProps));
     };
     return Hoc;
 }

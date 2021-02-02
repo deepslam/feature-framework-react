@@ -30,7 +30,7 @@ function connectCollection(callback, Component, collection) {
         };
         react_1.useEffect(() => {
             updateProps();
-        }, Object.keys(ownProps));
+        }, Object.values(ownProps));
         react_1.useEffect(() => {
             ref.current = props;
             Object.keys(collection.events).forEach((eventName) => {

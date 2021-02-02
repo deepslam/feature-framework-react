@@ -28,7 +28,7 @@ export function connectModel<
 
     useEffect(() => {
       updateProps();
-    }, Object.keys(ownProps));
+    }, Object.values(ownProps));
 
     useEffect(() => {
       ref.current = props;

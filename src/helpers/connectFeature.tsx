@@ -24,14 +24,13 @@ export function connectFeature<
   const Hoc = (ownProps: O): JSX.Element => {
     const [props, setProps] = useState(callback(feature, ownProps));
     const ref = React.useRef<P>(props);
-
     const updateProps = () => {
       setProps({ ...callback(feature, ownProps) });
     };
 
     useEffect(() => {
       updateProps();
-    }, Object.keys(ownProps));
+    }, Object.values(ownProps));
 
     useEffect(() => {
       ref.current = props;
@@ -64,7 +63,7 @@ export function connectFeature<
       };
     });
 
-    return <Component {...props} />;
+    return <Component {...props} {...ownProps} />;
   };
 
   return Hoc;

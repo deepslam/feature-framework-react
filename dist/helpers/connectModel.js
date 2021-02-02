@@ -30,7 +30,7 @@ function connectModel(callback, Component, model) {
         };
         react_1.useEffect(() => {
             updateProps();
-        }, Object.keys(ownProps));
+        }, Object.values(ownProps));
         react_1.useEffect(() => {
             ref.current = props;
             Object.keys(model.baseEvents).forEach((eventName) => {

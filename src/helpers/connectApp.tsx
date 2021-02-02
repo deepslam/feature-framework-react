@@ -29,7 +29,7 @@ export function connectApp<
 
     useEffect(() => {
       updateProps();
-    }, Object.keys(ownProps));
+    }, Object.values(ownProps));
 
     useEffect(() => {
       ref.current = props;

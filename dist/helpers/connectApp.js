@@ -35,7 +35,7 @@ function connectApp(callback, Component, events = ["onUpdate", "onDataUpdate"]) 
         };
         react_1.useEffect(() => {
             updateProps();
-        }, Object.keys(ownProps));
+        }, Object.values(ownProps));
         react_1.useEffect(() => {
             ref.current = props;
             events.forEach((event) => {
